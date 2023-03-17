@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Site\SiteController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Admin\AdminController;
@@ -22,7 +23,7 @@ use App\Http\Controllers\Admin\CategoryController;
 |
 */
 
-Route::prefix('admin')->name('admin.')->group(function(){
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function(){
     Route::get('/',[AdminController::class,'index'])->name('index');
 
     //categories
@@ -62,14 +63,23 @@ Route::prefix('admin')->name('admin.')->group(function(){
      Route::resource('images',ImageController::class);
 });
 
-Route::get('/',[SiteController::class,'index'])->name('site.index');
-Route::get('about',[SiteController::class,'about'])->name('site.about');
-Route::get('product-detail/{id}',[SiteController::class,'product_detail'])->name('site.product_detail');
-Route::get('category-detail/{id}',[SiteController::class,'category_detail'])->name('site.category_detail');
-Route::get('contact',[SiteController::class,'contact'])->name('site.contact');
-Route::get('product',[SiteController::class,'product'])->name('site.product');
-Route::get('shoping_cart',[SiteController::class,'shoping_cart'])->name('site.shoping_cart');
-Route::post('add_to_cart',[SiteController::class,'add_to_cart'])->name('site.add_to_cart');
-Route::post('add_review',[SiteController::class,'add_review'])->name('site.add_review');
-Route::get('search',[SiteController::class,'search'])->name('site.search');
-Route::post('add_to_favorite',[SiteController::class,'add_to_favorite'])->name('site.add_to_favorite');
+    Route::get('/',[SiteController::class,'index'])->name('site.index');
+    Route::get('about',[SiteController::class,'about'])->name('site.about');
+    Route::get('product-detail/{id}',[SiteController::class,'product_detail'])->name('site.product_detail');
+    Route::get('category-detail/{id}',[SiteController::class,'category_detail'])->name('site.category_detail');
+    Route::get('contact',[SiteController::class,'contact'])->name('site.contact');
+    Route::get('product',[SiteController::class,'product'])->name('site.product');
+    Route::get('shoping_cart',[SiteController::class,'shoping_cart'])->name('site.shoping_cart');
+    Route::post('add_to_cart',[SiteController::class,'add_to_cart'])->name('site.add_to_cart');
+    Route::post('add_review',[SiteController::class,'add_review'])->name('site.add_review');
+    Route::get('search',[SiteController::class,'search'])->name('site.search');
+    Route::post('add_to_favorite',[SiteController::class,'add_to_favorite'])->name('site.add_to_favorite');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
