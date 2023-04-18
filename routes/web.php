@@ -3,7 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Site\SiteController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\ImageController;
@@ -56,11 +58,15 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function(){
     Route::delete('sizes/{id}/forcedelete', [SizeController::class, 'forcedelete'])->name('sizes.forcedelete');
     Route::resource('sizes',SizeController::class);
 
-     //images
-     Route::get('images/trash', [ImageController::class, 'trach'])->name('images.trash');
-     Route::get('images/{id}/restore', [ImageController::class, 'restore'])->name('images.restore');
-     Route::delete('images/{id}/forcedelete', [ImageController::class, 'forcedelete'])->name('images.forcedelete');
-     Route::resource('images',ImageController::class);
+    //images
+    Route::get('images/trash', [ImageController::class, 'trach'])->name('images.trash');
+    Route::get('images/{id}/restore', [ImageController::class, 'restore'])->name('images.restore');
+    Route::delete('images/{id}/forcedelete', [ImageController::class, 'forcedelete'])->name('images.forcedelete');
+    Route::resource('images',ImageController::class);
+
+    Route::resource('roles',RoleController::class);
+    Route::resource('users',UserController::class);
+
 });
 
     Route::get('/',[SiteController::class,'index'])->name('site.index');
